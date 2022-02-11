@@ -69,8 +69,8 @@ def update_design_matrix(D, row, col, levels, coordinate_opt_cr) -> pd.DataFrame
     Update the row (row) and the column (col) of the design matrix according to the criterion input by the user.
     """
 
-    D.iat[row, col] = levels[coordinate_opt_cr.index(
-        max(coordinate_opt_cr))]  # change the design matrix[row, col] element to the element of levels at the max position
+    D.iat[row, col] = levels[coordinate_opt_cr.index(max(coordinate_opt_cr))]
+    # change the design matrix[row, col] element to the element of levels at the max position
     return D
 
 
@@ -141,7 +141,7 @@ def coordinate_exchange(experiments, features, epochs, levels, model_order, inte
     Run the coordinate exchange algorithm and produce the best model matrix, according to the criterion chosen, as well as a history of all other possible model matrices and the history of the selected criterion used.
     """
     run_background_check()
-    all_opt_cr = []  # used to feel the data for each level.
+    all_opt_cr = []  # used to fill the data for each level.
 
     for epoch in range(epochs):
         design_matrix = rand_design_matrix(experiments=experiments,
