@@ -92,17 +92,19 @@ class Design:
        Run the coordinate exchange algorithm and produce the best model matrix, according to the criterion chosen, as well as a history of all other possible model matrices and the history of the selected criterion used.
        """
         designs, histories = pd.DataFrame(), pd.DataFrame()
-        design_matrix['epoch'] = epoch
+        if 'epoch' not in design_matrix:
+            design_matrix['epoch'] = epoch
         history = pd.DataFrame(all_opt_cr)
         if max_bool:
             history['max'] = history.iloc[:, 2:].max(axis=1)
         else:
             history['min'] = history.iloc[:, 2:].min(axis=1)
 
-        history['epoch'] = epoch
-        designs = designs.append(design_matrix, ignore_index=True)
-        histories = histories.append(history, ignore_index=True)
-        return designs, histories
+        if 'epoch' not in history:
+            history['epoch'] = epoch
+        d = designs.append(design_matrix, ignore_index=True)
+        h = histories.append(history, ignore_index=True)
+        return d, h
 
     @staticmethod
     def find_best_design(histories, designs, max_bool=True):
@@ -145,7 +147,6 @@ class Design:
                     all_opt_cr.append([exp, feat, *coordinate_opt_cr])
                     # updated design_matrix
                     design_matrix.iat[exp, feat] = self.levels[feat][coordinate_opt_cr.index(max(coordinate_opt_cr))]
-
 
             # clean results of inner loops
             designs, histories = self.clear_histories(design_matrix=design_matrix, epoch=epoch, all_opt_cr=all_opt_cr)
